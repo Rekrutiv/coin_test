@@ -32,25 +32,16 @@ class _BitCoinState extends State<BitCoin> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('null'), actions: <Widget>[
-        IconButton(
-          icon: Icon(
-            Icons.settings,
-            color: Colors.white,
-          ),
-          onPressed: () {
-            // Navigator.push(
-            //     context, MaterialPageRoute(builder: (context) => Mode()));
-          },
-        )
-      ]),
+      appBar: AppBar(title: Text('Coin Test')),
       body: Column(
         children: [
 
-          // Expanded(
-          //   child: CoinValue(provider: provider,),
-          //   flex: 4,
-          // ),
+          SingleChildScrollView(
+            child: Container(
+              height: 100.0,
+              child: CoinValue(provider: provider,),
+            ),
+          ),
           Expanded(
             child: FutureBuilder<CoinbaseResponse>(
               future: apiService.getCoins(selectedCurrency),
@@ -84,9 +75,7 @@ class _BitCoinState extends State<BitCoin> {
                                       shape: MaterialStateProperty.all<
                                           RoundedRectangleBorder>(
                                           RoundedRectangleBorder(
-                                              borderRadius: BorderRadius
-                                                  .circular(
-                                                  18.0),
+
                                               side: BorderSide(
                                                   color: Colors.red)
                                           )
@@ -111,13 +100,12 @@ class _BitCoinState extends State<BitCoin> {
                                     shape: MaterialStateProperty.all<
                                         RoundedRectangleBorder>(
                                         RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(
-                                                18.0),
+
                                             side: BorderSide(color: Colors.red)
                                         )
                                     )
                                 ),
-                                onPressed: () => null
+                                onPressed: () => provider.openBitcoin()
                             ),
                           ],
                         ),

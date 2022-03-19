@@ -105,7 +105,7 @@ class CoinPrice extends StatelessWidget {
 
           if (snapshot.connectionState == ConnectionState.done) {
             return const Center(
-              child: Text('{No more data}'),
+              child: Text('No more data'),
             );
           }
 

@@ -6,7 +6,6 @@ import 'package:dio/dio.dart';
 import '../../config.dart';
 import '../../main.dart';
 
-const apiKey = 'EEC8C305-A172-4709-8EE0-9F8239BF7CE7';
 
 class CoinApi {
   final SocketService socketService = injector.get<SocketService>();
@@ -30,7 +29,7 @@ class CoinApi {
   }
 
   String getCoinsWebsocket() {
-    socketService.createCoinConnection(apiKey);
+    socketService.createCoinConnection(config.token);
     // socketService.coinSocket
     //     .on('unreadTokMessages', (dynamic coins) {
     //
