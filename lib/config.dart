@@ -15,5 +15,5 @@ class AppConfig {
 final AppConfig config = new AppConfig(
 
  baseUrl: 'https://rest.coinapi.io/',
-    baseWeb:'ws://ws.coinapi.io/'
+    baseWeb:'wss://ws.coinapi.io/v1/'
 );

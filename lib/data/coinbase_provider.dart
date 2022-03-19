@@ -2,78 +2,37 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:coin_test/models/coinbase_request_model.dart';
 import 'package:coin_test/models/coinbase_response_model.dart';
-import 'package:flutter/material.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
-/// Manages opening and closing the sockets for the
-/// two different sockets: ETH socker and BTC socket
 class CoinbaseProvider {
-  late final WebSocketChannel _ethWebsocket;
-
   late final WebSocketChannel _btcWebsocket;
 
-  static const _btcProduct = "BTC-EUR";
-
-  static const _ethProduct = "ETH-EUR";
-
   CoinbaseProvider()
-      : _ethWebsocket = WebSocketChannel.connect(
-    Uri.parse('wss://ws-feed.pro.coinbase.com'),
-  ),
-        _btcWebsocket = WebSocketChannel.connect(
-          Uri.parse('wss://ws-feed.pro.coinbase.com'),
+      : _btcWebsocket = WebSocketChannel.connect(
+          Uri.parse('wss://ws-sandbox.coinapi.io/v1/'),
+
         );
 
-  @visibleForTesting
-  CoinbaseProvider.testing(this._btcWebsocket, this._ethWebsocket);
-
-  Stream<CoinbaseResponse> get bitcoinStream => _btcWebsocket.stream
-      .map<CoinbaseResponse>(
-          (value) => CoinbaseResponse.fromJson(jsonDecode(value)))
-      .skipWhile((element) => element.productId != _btcProduct);
-
-  Stream<CoinbaseResponse> get ethStream => _ethWebsocket.stream
-      .map<CoinbaseResponse>(
-          (value) => CoinbaseResponse.fromJson(jsonDecode(value)))
-      .skipWhile((element) => element.productId != _ethProduct);
+  Stream<dynamic> get bitcoinStream =>
+      _btcWebsocket.stream;
+          // .map<CoinbaseResponse>(
+          // (value) => CoinbaseResponse.fromJson(jsonDecode(value)));
 
   void openBitcoin() {
     _btcWebsocket.sink.add(
       jsonEncode(
         CoinbaseRequest(
-          'subscribe',
-          [
-            {
-              "name": "ticker",
-              "product_ids": [_btcProduct]
-            }
-          ],
+          'hello2',
+          'EEC8C305-A172-4709-8EE0-9F8239BF7CE7',
+          false,
+          ["quote"],
+          ["BTC/USD"],
         ).toJson(),
       ),
     );
   }
 
-  void closeBitcoin() {
-    _btcWebsocket.sink.close();
-  }
-
-  void openEthereum() {
-    _ethWebsocket.sink.add(
-      jsonEncode(
-        CoinbaseRequest(
-          'subscribe',
-          [
-            {
-              "name": "ticker",
-              "product_ids": [_ethProduct]
-            }
-          ],
-        ).toJson(),
-      ),
-    );
-  }
-
-  void closeEthereum() {
-    _ethWebsocket.sink.close();
-  }
+  // void closeBitcoin() {
+  //   _btcWebsocket.sink.close();
+  // }
 }

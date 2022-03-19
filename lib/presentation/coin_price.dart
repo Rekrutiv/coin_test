@@ -5,9 +5,10 @@ import 'package:flutter/material.dart';
 
 
 class CoinValue extends StatefulWidget {
-
+final    CoinbaseProvider provider;
   const CoinValue({
     Key? key,
+    required this.provider
   }) : super(key: key);
 
   @override
@@ -24,6 +25,7 @@ class _CoinValueState extends State<CoinValue> {
   }
   @override
   Widget build(BuildContext context) {
+
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -47,13 +49,10 @@ class _CoinValueState extends State<CoinValue> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  CoinPrice(
-                    color: Colors.blue,
-                    stream: provider.ethStream,
-                  ),
+
                   CoinPrice(
                     color: Colors.orange,
-                    stream: provider.bitcoinStream,
+                    stream: widget.provider,
                   ),
                 ],
               ),
@@ -66,7 +65,7 @@ class _CoinValueState extends State<CoinValue> {
 }
 
 class CoinPrice extends StatelessWidget {
-  final Stream<CoinbaseResponse> stream;
+  final CoinbaseProvider stream;
   final Color color;
 
   const CoinPrice({
@@ -79,10 +78,12 @@ class CoinPrice extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(12.0),
-      child: StreamBuilder<CoinbaseResponse>(
-        stream: stream,
+      child: StreamBuilder<dynamic>(
+        stream: stream.bitcoinStream,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
+            stream.openBitcoin();
+
             return const Center(
               child: CircularProgressIndicator(),
             );
@@ -92,7 +93,7 @@ class CoinPrice extends StatelessWidget {
               snapshot.hasData) {
             return Center(
               child: Text(
-                '${snapshot.data!.productId}: ${snapshot.data!.price}',
+                '${snapshot.data!.toString()}',
                 style: TextStyle(
                   color: color,
                   fontSize: 24.0,
@@ -104,7 +105,7 @@ class CoinPrice extends StatelessWidget {
 
           if (snapshot.connectionState == ConnectionState.done) {
             return const Center(
-              child: Text('No more data'),
+              child: Text('{No more data}'),
             );
           }
 

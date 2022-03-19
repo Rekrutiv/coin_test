@@ -8,9 +8,14 @@ part of 'coinbase_request_model.dart';
 
 CoinbaseRequest _$CoinbaseRequestFromJson(Map<String, dynamic> json) {
   return CoinbaseRequest(
-    json['type'] as String,
-    (json['channels'] as List<dynamic>)
-        .map((e) => e as Map<String, dynamic>)
+    json['type'] as String?,
+    json['apikey'] as String?,
+    json['heartbeat'] as bool?,
+    (json['subscribeDataType'] as List<dynamic>?)
+        ?.map((e) => e as String)
+        .toList(),
+    (json['subscribeFilterAssetId'] as List<dynamic>?)
+        ?.map((e) => e as String)
         .toList(),
   );
 }
@@ -18,5 +23,8 @@ CoinbaseRequest _$CoinbaseRequestFromJson(Map<String, dynamic> json) {
 Map<String, dynamic> _$CoinbaseRequestToJson(CoinbaseRequest instance) =>
     <String, dynamic>{
       'type': instance.type,
-      'channels': instance.channels,
+      'apikey': instance.apikey,
+      'heartbeat': instance.heartbeat,
+      'subscribeDataType': instance.subscribeDataType,
+      'subscribeFilterAssetId': instance.subscribeFilterAssetId,
     };
