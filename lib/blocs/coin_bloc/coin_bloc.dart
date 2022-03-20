@@ -7,8 +7,8 @@ import 'package:equatable/equatable.dart';
 part 'coin_event.dart';
 part 'coin_state.dart';
 
-class CovidBloc extends Bloc<CoinEvent, CoinState> {
-  CovidBloc() : super(CoinInitial()) {
+class CoinBloc extends Bloc<CoinEvent, CoinState> {
+  CoinBloc() : super(CoinInitial()) {
     final ApiRepository _apiRepository = ApiRepository();
 
     on<GetCoinList>((event, emit) async {
