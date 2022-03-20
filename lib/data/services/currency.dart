@@ -12,13 +12,11 @@ class CoinApi {
   final dio = injector.get<Dio>();
 
   Future<CoinbaseResponse> getCoins(String currencySelected) async {
-    String url = config.baseUrl + 'v1/exchangerate/USD/UAH';
+    var arr = currencySelected.split('/');
+    String url = config.baseUrl + 'v1/exchangerate/${arr[1]}/${arr[0]}';
     final Response response = await dio.get(url);
     print('data $response');
 
-    // return response.data.map<CoinbaseResponse>((dynamic e) {
-    //   return CoinbaseResponse.fromJson(e);
-    // });
     return CoinbaseResponse(
         response.data['time'],
         response.data['asset_id_base'],

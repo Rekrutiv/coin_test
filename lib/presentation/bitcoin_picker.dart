@@ -13,11 +13,16 @@ class BitCoin extends StatefulWidget {
 class _BitCoinState extends State<BitCoin> {
   final CoinBloc _newsBloc = CoinBloc();
   late final CoinbaseProvider provider;
+  String selectedCoin = 'UAH/EUR';
+  var items = [
+    'UAH/USD',
+    'UAH/EUR',
+  ];
 
   @override
   void initState() {
     super.initState();
-    _newsBloc.add(GetCoinList());
+    _newsBloc.add(GetCoinList(coins: selectedCoin));
     provider = CoinbaseProvider();
   }
 
@@ -34,9 +39,7 @@ class _BitCoinState extends State<BitCoin> {
           );
         }
       }, child: BlocBuilder<CoinBloc, CoinState>(builder: (context, state) {
-        if (state is CoinInitial) {
-          return Center(child: CircularProgressIndicator());
-        } else if (state is CoinLoading) {
+        if (state is CoinInitial || state is CoinLoading) {
           return Center(child: CircularProgressIndicator());
         } else if (state is CoinLoaded) {
           return Scaffold(
@@ -57,26 +60,33 @@ class _BitCoinState extends State<BitCoin> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
+                            
                             Expanded(
-                              child: TextButton(
-                                  child: Text(
-                                    '${state.coinModel.assetIdBase}/${state.coinModel.assetIdQuote ?? ''}',
-                                    style: TextStyle(fontSize: 14),
-                                    textAlign: TextAlign.start,
-                                  ),
-                                  style: ButtonStyle(
-                                      padding:
-                                          MaterialStateProperty.all<EdgeInsets>(
-                                              EdgeInsets.all(15)),
-                                      foregroundColor:
-                                          MaterialStateProperty.all<Color>(
-                                              Colors.red),
-                                      shape: MaterialStateProperty.all<
-                                              RoundedRectangleBorder>(
-                                          RoundedRectangleBorder(
-                                              side: BorderSide(
-                                                  color: Colors.red)))),
-                                  onPressed: () => null),
+                              child: DropdownButton<String>(
+                                isExpanded: true,
+                                hint: Text(
+                                  "Coins",
+                                ),
+                                value: selectedCoin,
+                                isDense: true,
+                                onChanged: (String? newValue) {
+                                  setState(() {
+                                    selectedCoin=newValue??'UAH';
+                                    print(selectedCoin);
+
+                                    context
+                                        .read<CoinBloc>()
+                                        .add(GetCoinList(coins: selectedCoin));
+
+                                  });
+                                },
+                                items: items.map((String items) {
+                                  return DropdownMenuItem<String>(
+                                    value: items,
+                                    child: Text(items),
+                                  );
+                                }).toList(),
+                              ),
                             ),
                             SizedBox(width: 30),
                             TextButton(

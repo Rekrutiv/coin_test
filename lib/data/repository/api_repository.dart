@@ -8,8 +8,8 @@ class ApiRepository {
   final _provider  = injector.get<CoinApi>();
 
 
-  Future<CoinbaseResponse> fetchCoin() {
-    return _provider.getCoins('USD');
+  Future<CoinbaseResponse> fetchCoin(String coin ) {
+    return _provider.getCoins(coin);
   }
 }
 

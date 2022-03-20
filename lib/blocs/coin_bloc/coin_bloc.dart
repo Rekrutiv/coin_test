@@ -14,7 +14,7 @@ class CoinBloc extends Bloc<CoinEvent, CoinState> {
     on<GetCoinList>((event, emit) async {
       try {
         emit(CoinLoading());
-        final mList = await _apiRepository.fetchCoin();
+        final mList = await _apiRepository.fetchCoin(event.coins);
         emit(CoinLoaded(mList));
 
       } on NetworkError {
